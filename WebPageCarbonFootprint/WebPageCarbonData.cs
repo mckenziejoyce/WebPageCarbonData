@@ -47,6 +47,7 @@ namespace WebPageCarbonFootprint
             return jsonObject;
         }
 
+        //Print in readable format
         public string formatPrintOutput()
         {
             string output = Environment.NewLine;

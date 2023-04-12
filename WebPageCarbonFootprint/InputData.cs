@@ -19,7 +19,7 @@ namespace WebPageCarbonFootprint
             while (!validInput)
             {
                 Console.WriteLine("Are you using renewable energy (not grid) to access this website Y/N");
-                string energyTypeInput = Console.ReadLine().ToUpper();
+                string energyTypeInput = Console.ReadLine().ToUpper().Trim();
                 this.usingRenewableEnergy = (energyTypeInput == "Y" || energyTypeInput == "YES");
                 this.usingGridEnergy = (energyTypeInput == "N" || energyTypeInput == "NO");
                 validInput = this.usingRenewableEnergy || this.usingGridEnergy;

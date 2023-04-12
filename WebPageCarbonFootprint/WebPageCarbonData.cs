@@ -41,6 +41,11 @@ namespace WebPageCarbonFootprint
                     Console.WriteLine("Invalid Website for Testing");
                     throw new Exception("Please input a valid website for carbon data");
                 }
+                catch(Exception e)
+                {
+                    Console.WriteLine("Error occured: " + e.Message);
+                    throw new Exception("Failed to get data, "+e.Message);
+                }
                 string jsonString = await response.Content.ReadAsStringAsync();
                 jsonObject = JsonConvert.DeserializeObject<WebsiteCarbonGetResponse>(jsonString);
             }
@@ -59,18 +64,10 @@ namespace WebPageCarbonFootprint
                       "percentage into account: " + getResponse.statistics.adjustedBytes + Environment.NewLine;
             output += "Amount of energy transferred on each page load: " + getResponse.statistics.energy + " KWg" + Environment.NewLine;
             output += "Amount of CO2 transferred on each page load:" + Environment.NewLine;
-            // If user is using renewable energy return those stats
-            if (this.userInput.usingRenewableEnergy)
-            {
-                output += "    " + getResponse.statistics.co2.renewable.grams + " grams" + Environment.NewLine;
-                output += "    " + getResponse.statistics.co2.renewable.litres + " litres" + Environment.NewLine;
-            }
-            // If user is using grid energy use those stats 
-            else
-            {
-                output += "    " + getResponse.statistics.co2.grid.grams + " grams" + Environment.NewLine;
-                output += "    " + getResponse.statistics.co2.grid.litres + " litres" + Environment.NewLine;
-            }
+            var CO2transferGrams = this.userInput.usingRenewableEnergy ? getResponse.statistics.co2.renewable.grams : getResponse.statistics.co2.grid.grams;
+            var CO2transferLitres = this.userInput.usingRenewableEnergy ? getResponse.statistics.co2.renewable.litres : getResponse.statistics.co2.grid.litres;
+            output += String.Format("    {0} grams{1}", CO2transferGrams, Environment.NewLine);
+            output += String.Format("    {0} grams{1}", CO2transferLitres, Environment.NewLine);
 
             return output;
         }
